@@ -1,0 +1,45 @@
+{% extends 'base_bottom.html' %}
+{% load static from staticfiles %}
+{% block js %}{% endblock js %}
+	{% block top %}
+	<div class="header_con">
+        <div class="header">
+            <div class="welcome fl">欢迎来到天天生鲜!</div>
+            <div class="fr">
+                {% if user.username != '' %}
+                    <div class="login_info fl">
+                        欢迎您：<em>{{ user.username }}</em>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'user:user_logout' %}">退 出</a>
+                    </div>
+                {% else %}
+                <div class="login_btn fl">
+                    <a href="{% url 'user:login' %}">登录</a>
+                    <span>|</span>
+                    <a href="{% url 'user:register' %}">注册</a>
+                </div>
+                {% endif %}
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="{% url 'user:user_center_info' %}">用户中心</a>
+                    <span>|</span>
+                    <a href="{% url 'cart:cart_center' %}">我的购物车</a>
+                    <span>|</span>
+                    <a href="{% url 'user:user_center_order' %}">我的订单</a>
+                </div>
+            </div>
+        </div>
+		</div>
+        <div class="search_bar clearfix">
+		<a href="{% url 'goods:index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}"></a>
+		<div class="search_con fr">
+            <form action="{% url 'haystack_search' %}" method="get">
+               <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+			<input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+		</div>
+
+		</div>
+	{% endblock top %}
+
+
+

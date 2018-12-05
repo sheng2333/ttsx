@@ -1,0 +1,69 @@
+{% extends 'base_bottom.html' %}
+{% load static from staticfiles %}
+{% block title %}{{ title }}{% endblock title %}
+
+{% block js %}
+{#<script type="text/javascript" src="{% static 'js/login.js' %}"></script>#}
+<script type="text/javascript">
+
+$(function(){
+
+	var error_password = false;
+
+	$('#pwd').blur(function() {
+		check_pwd();
+	});
+
+
+	function check_pwd(){
+
+		var len = $('#pwd').val().length;
+		if(len<8||len>20)
+		{
+			$('#pwd').next().html('密码最少8位，最长20位')
+			$('#pwd').next().show();
+			error_password = true;
+		}
+		else
+		{
+				$('#pwd').next().hide();
+				error_password = false;
+			}
+
+
+	}
+
+
+
+	$('#reg_form').submit(function() {
+
+        check_pwd();
+
+
+        if (error_password == false) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    })
+})
+
+
+</script>
+{% endblock js %}
+
+{% block main %}
+
+<div class="form_input">
+
+<form method="post" action="{% url 'user:cpwd' %}" id="reg_form">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ id }}">
+    <input type="password" name="pwd" class="pass_input" placeholder="请输入密码" id="pwd">
+    <div class="pwd_error">输入错误</div>
+    <input type="submit" name="" value="提交" class="input_submit">
+</form>
+</div>
+{% endblock main %}

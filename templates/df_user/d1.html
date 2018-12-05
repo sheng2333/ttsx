@@ -1,0 +1,196 @@
+{% extends 'base_bottom_top.html' %}
+{% load static from staticfiles %}
+
+
+{% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.imagezoom.min.js' %}"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".jqzoom").imagezoom();
+
+	});
+</script>
+
+
+<style type="text/css">
+/* box */
+.box{width:610px;margin:100px auto;}
+.tb-pic a{display:table-cell;text-align:center;vertical-align:middle;}
+.tb-pic a img{vertical-align:middle;}
+.tb-pic a{*display:block;*font-family:Arial;*line-height:1;}
+.tb-thumb{margin:10px 0 0;overflow:hidden;}
+.tb-thumb li{background:none repeat scroll 0 0 transparent;float:left;height:42px;margin:0 6px 0 0;overflow:hidden;padding:1px;}
+.tb-s310, .tb-s310 a{height:310px;width:310px;}
+.tb-s310, .tb-s310 img{max-height:310px;max-width:310px;}
+.tb-s310 a{*font-size:271px;}
+.tb-s40 a{*font-size:35px;}
+.tb-s40, .tb-s40 a{height:40px;width:40px;}
+.tb-booth{border:1px solid #CDCDCD;position:relative;z-index:1;}
+.tb-thumb .tb-selected{background:none repeat scroll 0 0 #C30008;height:40px;padding:2px;}
+.tb-thumb .tb-selected div{background-color:#FFFFFF;border:medium none;}
+.tb-thumb li div{border:1px solid #CDCDCD;}
+.zoomDiv{z-index:999;position:absolute;top:0px;left:0px;width:180px;height:180px;background:#ffffff;border:1px solid #CCCCCC;display:none;text-align:center;overflow:hidden;}
+.zoomMask{position:absolute;background:url("images/mask.png") repeat scroll 0 0 transparent;cursor:move;z-index:1;}
+
+
+</style>
+{% endblock js %}
+{% block main %}
+	<div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="#" class="fruit">新鲜水果</a></li>
+					<li><a href="#" class="seafood">海鲜水产</a></li>
+					<li><a href="#" class="meet">猪牛羊肉</a></li>
+					<li><a href="#" class="egg">禽类蛋品</a></li>
+					<li><a href="#" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="#" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+		<a href="#">新鲜水果</a>
+		<span>></span>
+		<a href="#">商品详情</a>
+	</div>
+	<div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl"><img src="{{ GoodsImage.image.url }}" id="goods_detail_img"></div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{ GoodsSKUInfo.name }}</h3>
+			<p>{{ GoodsSKUInfo.desc }}</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em>{{ GoodsSKUInfo.price }}</em></span>
+				<span class="show_unit">单  位：{{ GoodsSKUInfo.unite }}</span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">数 量：</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl" value="1" id="num_show" oninput = "value=value.replace(/[^\d]/g,'')">
+					<a href="javascript:" class="add fr" id="add">+</a>
+					<a href="javascript:" class="minus fr" id="minus">-</a>
+				</div>
+			</div>
+			<div class="total" >总价：<em id="total">16.80元</em></div>
+			<div class="operate_btn">
+				<a href="javascript:" class="buy_btn">立即购买</a>
+				<a href="javascript:" class="add_cart" id="add_cart">加入购物车</a>
+			</div>
+		</div>
+	</div>
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+                    {% for new in goodsNew %}
+
+                        <li>
+                            <a href="{% url 'goods:detail' %}?skuid={{ new.id }}"><img src="{{ new.image.url }}"></a>
+                            <h4><a href="{% url 'goods:detail' %}?skuid={{ new.id }}">{{ new.name }}</a></h4>
+                            <div class="prize">￥{{ new.price }}</div>
+                        </li>
+
+                    {% endfor %}
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="active">商品介绍</li>
+				<li>评论</li>
+			</ul>
+
+			<div class="tab_content">
+				<dl>
+					<dt>商品详情：</dt>
+					<dd>{{ GoodsSKUInfo.goods.detail|safe }}</dd>
+                    <div class="box">
+	<div class="tb-booth tb-pic tb-s310">
+		<a href="http://192.168.12.181:7777/group1/M00/00/01/wKgMtVvOuiKAMBzEAAKX_dViRzE7135624"><img src="http://192.168.12.181:7777/group1/M00/00/01/wKgMtVvOuiKAMBzEAAKX_dViRzE7135624" alt="美女" rel="http://192.168.12.181:7777/group1/M00/00/01/wKgMtVvOuiKAMBzEAAKX_dViRzE7135624" class="jqzoom" /></a>
+	</div>
+	<ul class="tb-thumb" id="thumblist">
+		<li class="tb-selected"><div class="tb-pic tb-s40"><a href="#"><img src="images/01_small.jpg" mid="images/01_mid.jpg" big="images/01.jpg"></a></div></li>
+		<li><div class="tb-pic tb-s40"><a href="#"><img src="images/02_small.jpg" mid="images/02_mid.jpg" big="images/02.jpg"></a></div></li>
+		<li><div class="tb-pic tb-s40"><a href="#"><img src="images/03_small.jpg" mid="images/03_mid.jpg" big="images/03.jpg"></a></div></li>
+		<li><div class="tb-pic tb-s40"><a href="#"><img src="images/04_small.jpg" mid="images/04_mid.jpg" big="images/04.jpg"></a></div></li>
+		<li><div class="tb-pic tb-s40"><a href="#"><img src="images/05_small.jpg" mid="images/05_mid.jpg" big="images/05.jpg"></a></div></li>
+	</ul>
+</div>
+				</dl>
+			</div>
+		</div>
+	</div>
+
+{% endblock main %}
+
+{% block end %}
+<div class="add_jump"></div>
+    <script type="text/javascript">
+    $(function () {
+
+        var prize = {{ GoodsSKUInfo.price }}
+        $('#total').text(prize.toFixed(2)+'元')
+
+        $("#add").click(function(){
+            var top=$("#num_show").val();
+            top++;
+            $("#num_show").prop("value",top)
+            $('#total').text(((top*(prize*1000))/1000).toFixed(2)+'元')
+		})
+		$("#minus").click(function(){
+		    var top=$("#num_show").val();
+            if (top<=1){
+                top=1
+            }else{
+                top--;
+                $("#num_show").prop("value",top)
+                $('#total').text(((top*(prize*1000))/1000).toFixed(2)+'元')
+            }
+		})
+        $('#num_show').change(function () {
+            var num = $("#num_show").val();
+            $('#total').text(((num*(prize*1000))/1000).toFixed(2)+'元')
+        })
+
+
+		var $add_x = $('#add_cart').offset().top;
+		var $add_y = $('#add_cart').offset().left;
+
+		var $to_x = $('#show_count').offset().top;
+		var $to_y = $('#show_count').offset().left;
+
+		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
+		$('#add_cart').click(function(){
+			$(".add_jump").stop().animate({
+				'left': $to_y+7,
+				'top': $to_x+7},
+				"fast", function() {
+					$(".add_jump").fadeOut('fast',function(){
+						$('#show_count').html(2);
+					});
+
+			});
+		})
+
+
+    })
+
+	</script>
+
+{% endblock end %}

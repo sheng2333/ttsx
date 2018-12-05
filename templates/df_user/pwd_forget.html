@@ -1,0 +1,89 @@
+{% extends 'base_bottom.html' %}
+{% load static from staticfiles %}
+{% block title %}{{ title }}{% endblock title %}
+
+{% block js %}
+{#<script type="text/javascript" src="{% static 'js/login.js' %}"></script>#}
+<script type="text/javascript">
+
+$(function(){
+
+	var error_name = false;
+
+	$('#username').blur(function() {
+		check_user_name();
+	});
+
+
+	function check_user_name(){
+		var len = $('#username').val().length;
+		if(len<5||len>20)
+		{
+			$('#username').next().html('请输入5-20个字符的用户名')
+			$('#username').next().show();
+			error_name = true;
+
+		}
+		else
+		{
+			$.get('/user/info_yz/?uname='+$('#username').val(),function (data) {
+				if (data.username==1){
+					$('#username').next().html('用户名不存在')
+					$('#username').next().show();
+					error_name = true;
+				}else {
+					$('#username').next().hide();
+					error_name = false;
+				}
+            });
+
+		}
+	}
+
+
+
+
+	$('#reg_form').submit(function() {
+		check_user_name();
+		var urls = $('#reg_form').attr('action')+'?info='
+        urls+=$('#username').val()
+        $('#reg_form').attr('action',urls)
+
+
+
+		if (error_name == false)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	});
+
+
+})
+
+
+</script>
+{% endblock js %}
+
+{% block main %}
+
+<div class="form_input">
+
+<form method="post" action="{% url 'user:info_yza' %}" id="reg_form">
+    {% csrf_token %}
+    <input type="text" name="username" class="name_input" placeholder="请输入用户名" id="username">
+    <div class="user_error">输入错误</div>
+{#    <input type="text" name="useremail" class="pass_input" placeholder="请输入邮箱" id="useremail">#}
+{#    <div class="pwd_error">输入错误</div>#}
+{#    <div class="yanzhengma clearfix"><label for="yzm">验证码：</label>#}
+{#    <input type="text" name="yzm" id="yzm" placeholder="请输入验证码">#}
+{#    </div>#}
+    <input type="submit" name="" value="提交" class="input_submit">
+
+</form>
+</div>
+{% endblock main %}

@@ -1,0 +1,29 @@
+{% extends 'base_bottom.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block js %}
+<script>
+$(function () {
+    setInterval(go,1000);
+    var x=4;
+    function go() {
+        if (x>=0){
+            $("#sp").text(x);
+        }else {
+            location.href="{% url 'user:login' %}";
+        }
+        x--;
+    }
+})
+</script>
+<style type="text/css">
+
+    .jump_div{
+        font-size: 25px;
+        text-align: center;
+        padding: 100px;
+    }
+
+</style>
+
+{% endblock js %}
+	{% block main %}<div class="jump_div">邮件已发送，请前往邮箱完成注册。<span id="sp">5</span>秒后跳转到登录界面......</div>{% endblock main %}

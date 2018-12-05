@@ -1,0 +1,83 @@
+{% extends 'base_bottom.html' %}
+{% load static from staticfiles %}
+{% block title %}{{ title }}{% endblock title %}
+{% block js %}
+{#<script type="text/javascript" src="{% static 'js/login.js' %}"></script>#}
+<script type="text/javascript">
+$(function(){
+	var error_email = false;
+	$('#useremail').blur(function() {
+		check_email();
+	});
+	function check_email(){
+		var re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
+		if(re.test($('#useremail').val()))
+		{
+			$.get('/user/email_yz?email='+$('#useremail').val()+'&info='+'{{ get_info }}',function (data) {
+				if (data.email==0){
+					$('#useremail').next().html('邮箱错误！')
+					$('#useremail').next().show();
+					error_email = true;
+				}else {
+					$('#useremail').next().hide();
+					error_email = false;
+				}
+            });
+		}
+		else
+		{
+			error_email = true;
+		}
+	}
+    $('#btn').click(function() {
+		check_email();
+		var btn=$('#btn')
+		if (error_email == false)
+		{
+            settime(this)
+            $.get('/user/fsyzm?email='+$('#useremail').val()+'&info='+'{{ get_info }}')
+            $('.pwd_error').html('邮件已发送，请前往邮箱查看。')
+			$('.pwd_error').show();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	});
+	var countdown=60;
+    function settime(obj) {
+        if (countdown == 0) {
+            obj.removeAttribute("disabled");
+            obj.removeAttribute("style");
+            obj.value="发送验证码";
+            countdown = 60;
+            return;
+        } else {
+            obj.setAttribute("style", "background-color: #a8a8a8")
+            obj.setAttribute("disabled", 'disabled');
+            obj.value=countdown+'秒后可重新发送';
+            countdown--;
+    }
+    setTimeout(function() {
+        settime(obj) }
+        ,1000)
+    }
+})
+</script>
+{% endblock js %}
+{% block main %}
+<div class="form_input">
+<form method="post" action="{% url 'user:info_yza' %}" id="reg_form">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ token }}">
+    <input type="text" name="useremail" class="pass_input" placeholder="请输入邮箱" id="useremail">
+    <div class="pwd_error">输入错误</div>
+{#    <div class="yanzhengma clearfix"><label for="yzm">验证码：</label>#}
+    <input type="button" name="" value="发送验证码" class="input_submit" id="btn">
+{#    <input type="text" name="yzm" id="yzm" placeholder="请输入验证码">#}
+{#    </div>#}
+{#    <input type="submit" name="" value="提交" class="input_submit">#}
+</form>
+</div>
+{% endblock main %}

@@ -1,0 +1,47 @@
+
+{% extends 'base_user_center.html' %}
+{% block title %}{{ title }}{% endblock title %}
+{% block js1 %}
+<script type="text/javascript" src="/static/js/register.js"></script>
+{% endblock js1 %}
+{% block right %}
+		<div class="right_content clearfix">
+				<div class="info_con clearfix">
+				<h3 class="common_title2">基本信息</h3>
+						<ul class="user_info_list">
+                                <li><span>用户名：</span>{{ userName }}</li>
+                            {% if userinfo != 0 %}
+                                <li><span>联系方式：</span>{{ userPhone }}</li>
+                                <li><span>联系地址：</span>{{ userAddr }}</li>
+                            {% else %}
+                                <li><span></span></li>
+                            {% endif %}
+						</ul>
+				</div>
+				<h3 class="common_title2">最近浏览</h3>
+				<div class="has_view_list">
+					<ul class="goods_type_list clearfix">
+                        {% for his in his_list %}
+
+                        <li>
+                            <a href="{% url 'goods:detail' %}?skuid={{ his.id }}"><img src="{{ his.image.url }}"></a>
+                            <h4><a href="{% url 'goods:detail' %}?skuid={{ his.id }}">{{ his.goods.name}}</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥{{ his.price }}</span>
+                                <span class="unit">{{ his.price }}/{{ his.unite }}</span>
+                                <a href="#" class="add_goods" title="加入购物车"></a>
+					        </div>
+				        </li>
+
+                        {% endfor %}
+
+
+
+
+
+			</ul>
+		</div>
+		</div>
+
+
+{% endblock right %}

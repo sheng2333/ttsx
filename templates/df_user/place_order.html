@@ -1,0 +1,159 @@
+{% extends 'base_bottom_top_no_search.html' %}
+{% load static from staticfiles %}
+
+{% block main %}
+{#    <form action="{% url 'order:order_handle' %}" method="post">#}
+    {% csrf_token %}
+    <h3 class="common_title">确认收货地址</h3>
+
+	<div class="common_list_con clearfix">
+		<dl>
+			<dt>寄送到：</dt>
+            {% for usi in userInfo %}
+
+                <dd><input type="radio" required name="addr" {% if usi.isShow == 1 %}checked="checked"{% endif %} value="{{ usi.id }}">{{ usi.sheng }}&nbsp;{{ usi.shi }}&nbsp;{{ usi.xian }}&nbsp;{{ usi.detail }}&nbsp;({{ usi.userShou }}&nbsp;收)&nbsp;{{ usi.phone }}</dd>
+
+            {% endfor %}
+
+{#			<dd><input type="radio" name="" checked="">北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>#}
+		</dl>
+		<a href="{% url 'user:user_center_site' %}" class="edit_site">编辑收货地址</a>
+	</div>
+
+	<h3 class="common_title">支付方式</h3>
+	<div class="common_list_con clearfix">
+		<div class="pay_style_con clearfix">
+
+            {% for pay in payment %}
+                <input type="radio" name="pay_style" value="{{ pay.id }}" {% if forloop.first %}checked{% endif %}>
+			    <label class="{{ pay.payment_logo }}">{{ pay.payment_name }}</label>
+            {% endfor %}
+		</div>
+	</div>
+
+	<h3 class="common_title">商品列表</h3>
+
+	<div class="common_list_con clearfix">
+		<ul class="goods_list_th clearfix" >
+			<li class="col01">商品名称</li>
+			<li class="col02">商品单位</li>
+			<li class="col03">商品价格</li>
+			<li class="col04">数量</li>
+			<li class="col05">小计</li>
+		</ul>
+        {% for sku in skuList %}
+            <input type="hidden" value="{{ sku.id }}" class="sku_id" name="sku_id">
+            <ul class="goods_list_td clearfix" value="{{ sku.id }}">
+			<li class="col01">{{ forloop.counter }}</li>
+			<li class="col02"><img src="{{ sku.image.url }}"></li>
+			<li class="col03">{{ sku.name }}</li>
+			<li class="col04">{{ sku.unite }}</li>
+			<li class="col05">{{ sku.price }}元</li>
+			<li class="col06">{{ sku.count }}</li>
+			<li class="col07">{{ sku.amount }}元</li>
+		</ul>
+        {% endfor %}
+	</div>
+
+	<h3 class="common_title">总金额结算</h3>
+
+	<div class="common_list_con clearfix">
+		<div class="settle_con">
+			<div class="total_goods_count">共<em>{{ toCount }}</em>件商品，总金额<b>{{ toPrice }}元</b></div>
+			<div class="transit">运费：<b>{{ freight }}元</b></div>
+			<div class="total_pay">实付款：<b>{{ allPrice }}元</b></div>
+		</div>
+	</div>
+
+	<div class="order_submit clearfix">
+{#        <input type="submit" value="提交订单" id="order_btn">#}
+		<a href="javascript:" skus="{{ skuIdList }}" id="order_btn">提交订单</a>
+	</div>
+
+{% endblock main %}
+
+{% block end %}
+
+
+    	<div class="popup_con">
+            <div class="popup">
+                <p class="info_c">订单提交中，请稍等。。。</p>
+            </div>
+            <div class="mask"></div>
+	    </div>
+
+	<script type="text/javascript">
+
+    {#$.ajaxSetup({  #}
+{#    async : false  #}
+{# });#}
+		$('#order_btn').click(function() {
+
+		    {#$('.popup_con').fadeIn('fast')#}
+
+            $('.popup_con').fadeIn('fast', function() {
+
+			 });
+
+
+		    var skus=$(this).attr('skus')
+		    var addr=$('input[name="addr"]:checked').attr('value')
+		    var pay_style=$('input[name="pay_style"]:checked').attr('value')
+            csrf = $('input[name="csrfmiddlewaretoken"]').val()
+
+
+            params={
+		        'skus':skus,
+                'addr':addr,
+                'pay_style':pay_style,
+                'csrfmiddlewaretoken':csrf
+            }
+
+            console.log(params)
+
+            $.post("{% url 'order:order_handle' %}",params,function(info){
+
+                if (info.res == 5){
+                    console.log('info.res == 5')
+                    $('.info_c').text(info.errmsg+',即将跳转到订单页面。。。')
+                    console.log($('.info_c').text())
+                    setTimeout(function(){
+                        $('.popup_con').fadeOut('fast',function(){
+                            window.location.href = '{% url 'user:user_center_order' %}';
+                            {#$('.info_c').text('订单提交中，请稍等。。。')#}
+                        });
+                    },3000);
+
+
+                 }else {
+
+                    $('.info_c').text(info.errmsg)
+
+                    $('.popup_con').fadeIn('fast', function() {
+                        setTimeout(function(){
+                            $('.popup_con').fadeOut('fast')},3000)
+
+                     });
+
+
+                 }
+
+
+                })
+            $('.info_c').text('订单提交中，请稍等。。。')
+            })
+
+			{#localStorage.setItem('order_finish',2);#}
+
+			{#$('.popup_con').fadeIn('fast', function() {#}
+            {##}
+			{#	setTimeout(function(){#}
+			{#		$('.popup_con').fadeOut('fast',function(){#}
+			{#			window.location.href = 'index.html';#}
+			{#		});#}
+			{#	},3000)#}
+            {##}
+			{# });#}
+
+	</script>
+{% endblock end %}

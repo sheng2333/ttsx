@@ -1,0 +1,27 @@
+{% extends 'base_user_center.html' %}
+{% load static from staticfiles %}
+{% block title %}{{ title }}{% endblock title %}
+
+	{% block js %}
+	{% endblock js %}
+
+
+{% block right %}
+		<div class="right_content clearfix">
+            <div class="site_con" id="addr">
+                <h3 class="common_title2">收货地址</h3>
+                <dl>
+                    <dt>当前地址：</dt>
+                    {% if userinfo == 0 %}
+                    <dd>无内容</dd>
+                    {% else %}
+                        {% for i in infos %}
+                    <dd>{{ i.userAddr }}    ({{ i.userShou }} 收)    {{ i.userPhone }}&emsp;<a href="{% url 'user:user_center_site' %}?action=edit&uid={{ i.id }}" id="edit">编辑</a>&ensp;|&ensp;<a href="{% url 'user:user_center_site' %}?action=delate&uid={{ i.id }}">删除</a>&emsp;{% if i.isShow == True %}默认地址
+                        {% else %}<a href="{% url 'user:user_center_site' %}?action=set_default&uid={{ i.id }}">设为默认地址</a>{% endif %}</dd>
+                        {% endfor %}
+                    {% endif %}
+                    <dd><a href="{% url 'user:user_center_site' %}?action=add">新增收货地址</a></dd>
+                </dl>
+            </div>
+		</div>
+{% endblock right %}

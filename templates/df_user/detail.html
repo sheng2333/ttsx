@@ -1,0 +1,425 @@
+{% extends 'base_bottom_top.html' %}
+{% load static from staticfiles %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.imagezoom.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".jqzoom").imagezoom();
+        $("#thumblist li a").click(function(){
+            //增加点击的li的class:tb-selected，去掉其他的tb-selecte
+            $(this).parents("li").addClass("tb-selected").siblings().removeClass("tb-selected");
+            //赋值属性
+            $(".jqzoom").attr('src',$(this).find("img").attr("mid"));
+            $(".jqzoom").attr('rel',$(this).find("img").attr("big"));
+        });
+    });
+
+    $(function () {
+
+        $('.detail_tab li').click(function () {
+            $(this).addClass("active");
+            $(this).siblings().removeClass("active");
+
+
+            if ($('.detail_tab li:first').attr("class") == 'active'){
+                $('.detail').css('display','block')
+                $('.detail').siblings().css('display','none')
+            }else{
+                $('.comment').css('display','block')
+                $('.comment').siblings().css('display','none')
+            }
+        })
+        $('.comment a').click(function () {
+            $(this).next().css('display','block')
+        })
+        {#$('.comment a').click(function () {#}
+        {##}
+        {#    $(this).parent().append("                    <div class=\"form_add\">\n" +#}
+        {#        "                        <form action=\"\" method=\"post\">\n" +#}
+        {#        "                            {% csrf_token %}\n" +#}
+        {#        "                            <input type=\"hidden\" value=\"{{ userInfo.id }}\" name=\"user\">\n" +#}
+        {#        "                            <input type=\"hidden\" value=\"{{ GoodsSKUInfo.id }}\" name=\"goods\">\n" +#}
+        {#        "\n" +#}
+        {#        "                            <input type=\"hidden\" value=\"{{ com.parid_id }}\" name=\"obj1\">\n" +#}
+        {#        "\n" +#}
+        {#        "                            <input type=\"hidden\" value=\"{{ com2.parid_id }}\" name=\"obj2\">\n" +#}
+        {#        "                            <input type=\"hidden\" value=\"27878275\" name=\"obj2\">\n" +#}
+        {#        "\n" +#}
+        {#        "\n" +#}
+        {#        "                            <input type=\"text\" name=\"comment\">\n" +#}
+        {#        "                            <input type=\"submit\">\n" +#}
+        {#        "                        </form>\n" +#}
+        {#        "                    </div>")#}
+        {##}
+        {# })#}
+
+
+
+    })
+
+</script>
+
+
+<style type="text/css">
+/* box */
+.box{width:610px;margin:0 auto;}
+.tb-pic a{display:table-cell;text-align:center;vertical-align:middle;}
+.tb-pic a img{vertical-align:middle;}
+.tb-pic a{*display:block;*font-family:Arial;*line-height:1;}
+.tb-thumb{margin:10px 0 0;overflow:hidden;}
+.tb-thumb li{background:none repeat scroll 0 0 transparent;float:left;height:42px;margin:0 6px 0 0;overflow:hidden;padding:1px;}
+.tb-s310, .tb-s310 a{height:310px;width:310px;}
+.tb-s310, .tb-s310 img{max-height:310px;max-width:310px;}
+.tb-s310 a{*font-size:271px;}
+.tb-s40 a{*font-size:35px;}
+.tb-s40, .tb-s40 a{height:40px;width:40px;}
+.tb-booth{border:1px solid #CDCDCD;position:relative;z-index:1;}
+.tb-thumb .tb-selected{background:none repeat scroll 0 0 #C30008;height:40px;padding:2px;}
+.tb-thumb .tb-selected div{background-color:#FFFFFF;border:medium none;}
+.tb-thumb li div{border:1px solid #CDCDCD;}
+.zoomDiv{z-index:999;position:absolute;top:0px;left:0px;width:180px;height:180px;background:#ffffff;border:1px solid #CCCCCC;display:none;text-align:center;overflow:hidden;}
+.zoomMask{position:absolute;background:url("{% static 'images/mask.png' %}") repeat scroll 0 0 transparent;cursor:move;z-index:1;}
+#img_small{
+    width: 40px;
+}
+
+
+
+.oth{
+    height: 30px;
+    border: 1px crimson solid;
+    display: inline-block ;
+    line-height: 30px;
+    padding: 0 5px;
+    margin-left: 5px;
+}
+.comment{
+    display: none;
+}
+
+.comment_li_1 .com_name{
+    font-size: 14px;
+    color: black;
+    {#width: 20px;#}
+}
+.comment_li_1 .com_det{
+    font-size: 16px;
+    color: black;
+    width: 200px;
+    margin-left: 10px;
+}
+
+
+.comment_li_2 .com2_name{
+    margin-left: 10px;
+    font-size: 14px;
+}
+.comment_li_2 .com2_det{
+
+    width: 200px;
+    margin-left: 10px;
+}
+
+
+.form_add{
+    display: none;
+}
+
+</style>
+{% endblock js %}
+{% block main %}
+	<div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="#" class="fruit">新鲜水果</a></li>
+					<li><a href="#" class="seafood">海鲜水产</a></li>
+					<li><a href="#" class="meet">猪牛羊肉</a></li>
+					<li><a href="#" class="egg">禽类蛋品</a></li>
+					<li><a href="#" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="#" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+		<a href="{% url 'goods:goodsList' %}?type={{ GoodsSKUInfo.type.id }}">{{ GoodsSKUInfo.type.name }}</a>
+		<span>></span>
+		<a href="#">商品详情</a>
+	</div>
+	<div class="goods_detail_con clearfix">
+        <div class="goods_detail_pic fl">
+            <div class="box">
+			<div class="tb-booth tb-pic tb-s310">
+				<a href="{{ GoodsImage.0.image.url }}"><img src="{{ GoodsImage.0.image.url }}" alt="{{ GoodsSKUInfo.name }}" rel="{{ GoodsImage.0.image.url }}" class="jqzoom" /></a>
+			</div>
+			<ul class="tb-thumb" id="thumblist">
+                {% for img in GoodsImage %}
+                <li {% if forloop.first %}class="tb-selected"{% endif %}><div class="tb-pic tb-s40"><a href="javascript:"><img src="{{ img.image.url }}" mid="{{ img.image.url }}" big="{{ img.image.url }}" id="img_small"></a></div></li>
+                {% endfor %}
+			</ul>
+		</div>
+		</div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{ GoodsSKUInfo.name }}</h3>
+			<p>{{ GoodsSKUInfo.desc }}</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em>{{ GoodsSKUInfo.price }}</em></span>
+				<span class="show_unit">单  位：{{ GoodsSKUInfo.unite }}</span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">数 量：</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl" value="1" id="num_show" oninput = "value=value.replace(/[^\d]/g,'')">
+					<a href="javascript:" class="add fr" id="add">+</a>
+					<a href="javascript:" class="minus fr" id="minus">-</a>
+				</div>
+			</div>
+			<div class="total" >总价：<em id="total">16.80元</em></div>
+            <div class="tp">
+                <p>选择种类</p>
+                    {% for sku in skus %}
+                        <span class="oth"><a href="{% url 'goods:detail' %}?skuid={{ sku.id }}">{{ sku.name }}</a></span>
+                    {% endfor %}
+
+            </div>
+			<div class="operate_btn">
+				<a href="javascript:" class="buy_btn">立即购买</a>
+				<a href="javascript:" class="add_cart" id="add_cart" sku_id="{{ GoodsSKUInfo.id }}">加入购物车</a>
+			</div>
+		</div>
+	</div>
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+                    {% for new in goodsNew %}
+                        <li>
+                            <a href="{% url 'goods:detail' %}?skuid={{ new.id }}"><img src="{{ new.image.url }}"></a>
+                            <h4><a href="{% url 'goods:detail' %}?skuid={{ new.id }}">{{ new.name }}</a></h4>
+                            <div class="prize">￥{{ new.price }}</div>
+                        </li>
+
+                    {% endfor %}
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="active">商品介绍</li>
+				<li>评论</li>
+			</ul>
+
+			<div class="tab_content">
+				<dl class="detail">
+					<dt>商品详情：</dt>
+					<dd>{{ GoodsSKUInfo.goods.detail|safe }}</dd>
+				</dl>
+                <dl class="comment">
+					<dt>商品评价：</dt>
+					<dd>
+                    <ul>
+                    <div>
+                    {% if userInfo != '' %}
+                        <a href="javascript:">发表评价</a>
+                        <div class="form_add">
+                            <form action="{% url 'goods:comment' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ userInfo.id }}" name="user">
+                                <input type="hidden" value="{{ GoodsSKUInfo.id }}" name="goods">
+
+                                <input type="hidden" value="{{ com.id }}" name="obj">
+                                <input type="hidden" value="{{ urls }}" name="urls">
+
+
+                                <input type="text" name="comment">
+                                <input type="submit">
+                            </form>
+                        </div>
+
+                        {% else %}
+                        <a href="{% url 'user:login' %}">点击登录后发表评价</a>
+
+                    {% endif %}
+                        {% for com in comment %}
+					        <li class="comment_li_1"><span class="com_name">{{ com.username }}:</span><span class="com_det">{{ com.comments }}</span><span>&nbsp;&nbsp;
+</span>{% if userInfo != '' %}<a href="javascript:">评论</a>
+                                <div class="form_add">
+                                    <form action="{% url 'goods:comment' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ userInfo.id }}" name="user">
+                                        <input type="hidden" value="{{ GoodsSKUInfo.id }}" name="goods">
+
+                                        <input type="hidden" value="{{ com.id }}" name="obj">
+                                        <input type="hidden" value="{{ urls }}" name="urls">
+
+
+                                        <input type="text" name="comment">
+                                        <input type="submit">
+                                    </form>
+                                </div>
+                            {% endif %}
+                            </li>
+
+
+                                    {% for com2 in comment2 %}
+
+                                        {% if com2.parid_id == com.id %}
+                                            <li class="comment_li_2"><span class="com2_name">{{ com2.username }}:</span><span  class="com2_det">{{ com2.comments }}</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>{% if userInfo != '' %}<a
+                                                    href="javascript:">评论</a>
+                                                <div class="form_add">
+                                                <form action="{% url 'goods:comment' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" value="{{ userInfo.id }}" name="user">
+                                                    <input type="hidden" value="{{ GoodsSKUInfo.id }}" name="goods">
+                                                    <input type="hidden" value="{{ com2.id }}" name="obj">
+                                                    <input type="hidden" value="{{ urls }}" name="urls">
+                                                    <input type="text" name="comment">
+                                                    <input type="submit">
+                                                </form>
+                                            </div>
+                                                {% endif %}
+                                            </li>
+
+                                        {% endif %}
+                                    {% endfor %}
+                            {% empty %}
+                            <div style="font-size: 14px">暂无评论</div>
+					    {% endfor %}
+
+                    </ul>
+                    
+{#                    <div class="form_add">#}
+{#                        <form action="" method="post">#}
+{#                            {% csrf_token %}#}
+{#                            <input type="hidden" value="{{ userInfo.id }}" name="user">#}
+{#                            <input type="hidden" value="{{ GoodsSKUInfo.id }}" name="goods">#}
+{##}
+{#                            <input type="hidden" value="{{ com.parid_id }}" name="obj1">#}
+{##}
+{#                            <input type="hidden" value="{{ com2.parid_id }}" name="obj2">#}
+{#                            <input type="hidden" value="27878275" name="obj2">#}
+{##}
+{##}
+{#                            <input type="text" name="comment">#}
+{#                            <input type="submit">#}
+{#                        </form>#}
+{#                    </div>#}
+                    
+                    
+                    
+					</dd>
+				</dl>
+
+			</div>
+		</div>
+	</div>
+
+
+
+{% endblock main %}
+
+{% block end %}
+<div class="add_jump"></div>
+    <script type="text/javascript">
+    $(function () {
+
+        var prize = {{ GoodsSKUInfo.price }}
+        $('#total').text(prize.toFixed(2)+'元')
+
+        $("#add").click(function(){
+            var top=$("#num_show").val();
+            top++;
+            $("#num_show").prop("value",top)
+            $('#total').text(((top*(prize*1000))/1000).toFixed(2)+'元')
+		})
+		$("#minus").click(function(){
+		    var top=$("#num_show").val();
+            if (top<=1){
+                top=1
+            }else{
+                top--;
+                $("#num_show").prop("value",top)
+                $('#total').text(((top*(prize*1000))/1000).toFixed(2)+'元')
+            }
+		})
+        $('#num_show').change(function () {
+            var num = $("#num_show").val();
+            $('#total').text(((num*(prize*1000))/1000).toFixed(2)+'元')
+        })
+
+
+		{#var $add_x = $('#add_cart').offset().top;#}
+		{#var $add_y = $('#add_cart').offset().left;#}
+        {##}
+		{#var $to_x = $('#show_count').offset().top;#}
+		{#var $to_y = $('#show_count').offset().left;#}
+        {##}
+		{#$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})#}
+		{#$('#add_cart').click(function(){#}
+		{#	$(".add_jump").stop().animate({#}
+		{#		'left': $to_y+7,#}
+		{#		'top': $to_x+7},#}
+		{#		"fast", function() {#}
+		{#			$(".add_jump").fadeOut('fast',function(){#}
+		{#				$('#show_count').html(2);#}
+		{#			});#}
+        {##}
+		{#	});#}
+		{# } ) #}
+
+
+    })
+
+	</script>
+
+	<script type="text/javascript">
+		var $add_x = $('#add_cart').offset().top;
+		var $add_y = $('#add_cart').offset().left;
+
+		var $to_x = $('#show_count').offset().top;
+		var $to_y = $('#show_count').offset().left;
+		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
+		$('#add_cart').click(function(){
+		    sku_id = $(this).attr('sku_id')
+            count = $('.num_show').val()
+            csrf = $('input[name="csrfmiddlewaretoken"]').val()
+            params = {'sku_id':sku_id,'count':count,'csrfmiddlewaretoken':csrf}
+            $.post('/cart/add',params,function (data) {
+                if(data.res == 5){
+                    $(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
+                    $(".add_jump").stop().animate({
+                        'left': $to_y+7,
+				        'top': $to_x+7
+                    },
+                    'slow',function () {
+                            $(".add_jump").fadeOut('fast',function () {
+                                $('#show_count').html(data.total_count);
+                            });
+                        });
+                }
+                else {
+                    alert(data.errmsg)
+                }
+            })
+		})
+	</script>
+
+
+{% endblock end %}
